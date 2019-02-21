@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>com-lnson-signature-demo-parent</artifactId>
+        <groupId>com.lnson.signature.demo.parent</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>com-lnson-signature-demo-web</artifactId>
+    <packaging>war</packaging>
+
+    <name>com-lnson-signature-demo-web Maven Webapp</name>
+    <url>http://www.example.com</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.lnson.signature.demo.parent</groupId>
+            <artifactId>com-lnson-signature-demo-commons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lnson.signature.demo.parent</groupId>
+            <artifactId>com-lnson-signature-demo-entity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>com-lnson-signature-demo-web</finalName>
+    </build>
+</project>

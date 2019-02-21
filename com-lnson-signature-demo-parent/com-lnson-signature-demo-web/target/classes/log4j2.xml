@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<Configuration status="Debug" monitorInterval="30">
+
+	<properties>
+		<property name="PROJ_NAME">com-lnson-signature-demo-web</property>
+		<!--设置日志文件存储路径为tomcat/logs/${PROJ_NAME}-->
+		<property name="LOG_HOME">${sys:catalina.home}/logs/${PROJ_NAME}</property>
+		<!--设置日志输出格式 -->
+		<Property name="PATTERN_FORMAT">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M %n%msg%xEx%n</Property>
+	</properties>
+
+	<Appenders>
+		<!--控制台输出 -->
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="${PATTERN_FORMAT}" />
+		</Console>
+
+		<!--临时日志，每次启动程序会清空 -->
+		<File name="Log" fileName="${LOG_HOME}/${PROJ_NAME}.log">
+			<PatternLayout pattern="${PATTERN_FORMAT}" />
+		</File>
+
+		<!--自动存入按年份-月份建立的文件夹 info级别 -->
+		<RollingRandomAccessFile name="InfoLog"
+			fileName="${LOG_HOME}/info.log"
+			filePattern="${LOG_HOME}/info/$${date:yyyy-MM}/%d{yyyy-MM-dd}-%i.log"
+			immediateFlush="true">
+			<Filters>
+				<ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL" />
+				<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
+			</Filters>
+			<PatternLayout pattern="${PATTERN_FORMAT}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingRandomAccessFile>
+		<!--自动存入按年份-月份建立的文件夹 -->
+		<RollingRandomAccessFile name="ErrorLog"
+			fileName="${LOG_HOME}/error.log"
+			filePattern="${LOG_HOME}/error/$${date:yyyy-MM}/%d{yyyy-MM-dd}-%i.log"
+			immediateFlush="true">
+			<Filters>
+				<ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL" />
+				<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
+			</Filters>
+			<PatternLayout pattern="${PATTERN_FORMAT}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingRandomAccessFile>
+		<!--自动存入按年份-月份建立的文件夹 -->
+		<RollingRandomAccessFile name="FatalLog"
+			fileName="${LOG_HOME}/fatal.log"
+			filePattern="${LOG_HOME}/fatal/$${date:yyyy-MM}/%d{yyyy-MM-dd}-%i.log"
+			immediateFlush="true">
+			<Filters>
+				<ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY" />
+			</Filters>
+			<PatternLayout pattern="${PATTERN_FORMAT}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingRandomAccessFile>
+	</Appenders>
+
+	<Loggers>
+		<!-- 3rdparty Loggers -->
+		<logger name="org.springframework" level="warn" />
+		<logger name="org.apache" level="warn" />
+		<logger name="org.mybatis" level="warn" />
+		<logger name="java.sql" level="warn" />
+
+		<logger name="com.redis.jedis.demo.test" level="all" additivity="false">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="InfoLog" />
+			<appender-ref ref="ErrorLog" />
+			<appender-ref ref="FatalLog" />
+		</logger>
+
+		<root level="all" includeLocation="true">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="InfoLog" />
+			<appender-ref ref="ErrorLog" />
+			<appender-ref ref="FatalLog" />
+		</root>
+	</Loggers>
+
+</Configuration>
